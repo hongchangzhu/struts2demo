@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=0.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<script src="http://im.kdweibo.com/pub/js/qingjs.js"></script>
+<title>人员组织</title>
+</head>
+<body>
+	<div class="news-content">
+		<div class="operations">
+			<button onclick="selperson()" id="selperson">选择人员</button>
+			<button onclick="selorg()" id="selorg">选择组织</button>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		var ticket = getUrlParam('ticket'), first = 1;
+		
+		function selperson(){
+			XuntongJSBridge.call('selectPersons',{
+					'isMulti':false,
+					'blacklist':[],
+					'whitelist':[]
+				},
+				function(result){
+					console.info(result);
+				}
+			);
+		}
+		
+		//获取url中的参数
+		function getUrlParam(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+			var r = window.location.search.substr(1).match(reg); //匹配目标参数
+			if (r != null)
+				return unescape(r[2]);
+			return null; //返回参数值
+		}
+		function delimg(f) {
+			var r = confirm("删除该图片?");
+			if (r == true) {
+				$(f).remove();
+
+			}
+
+		}
+		function jsBridage(name) {
+			XuntongJSBridge.call('localFunction', {
+				'name' : name
+			}, function(result) {
+			});
+		}
+		function selimg(add) {
+			if (first) {
+				first = 0;
+				alert('注意:请不要选择或拍照大于5M的图片;根据网络情况,可能需要等待几秒时间上传图!');
+			}
+			XuntongJSBridge.call('selectPic', {
+				'name' : 'selectPic'
+			}, function(result) {
+				if (result.success && result.data != null) {
+					//alert("ok,ext="+result.data.fileExt+",data="+result.data.fileData.substr(0,50))   
+					postimg(result.data, add)
+				} else {
+					alert('设备调用出错:' + result.error)
+				}
+			});
+
+		}
+		function selorg() {
+			XuntongJSBridge.call('selectOrg', {
+				'name' : 'selectOrg'
+			}, function(result) {
+				if (result.success && result.data.orgids != null) {
+
+					posts(result.data.orgids)
+				} else {
+					alert('设备调用出错:' + result.error)
+				}
+			});
+
+		}
+	</script>
+</body>
+</html>
