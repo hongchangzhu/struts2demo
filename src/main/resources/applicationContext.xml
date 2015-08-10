@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- <context:annotation-config /> -->
+
+	<context:component-scan base-package="com.haochen.*" />
+
+
+
+	<bean id="userServiceImp" class="com.haochen.interceptor.UserServiceImp" />
+	<bean id="userInterceptor" class="com.haochen.interceptor.UserInterceptor" />
+	<bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 代理接口 -->
+		<property name="proxyInterfaces">
+			<value>com.haochen.interceptor.UserService</value>
+		</property>
+		<!-- 目标实现类 -->
+		<property name="target">
+			<ref local="userServiceImp" />
+		</property>
+		<!-- 拦截器 -->
+		<property name="interceptorNames">
+			<list>
+				<value>userInterceptor</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

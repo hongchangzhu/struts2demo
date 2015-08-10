@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	  "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	  "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="test" extends="json-default" namespace="/a">
+		<interceptors>
+			<interceptor-stack name="paramStack">
+				<interceptor-ref name="json" /><!-- 参数以json格式传输 -->
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="paramStack" />
+
+		<global-results>
+			<result name="json" type="json">
+				<!-- false表示父类的属性在在json中返回 -->
+				<param name="ignoreHierarchy">false</param>
+			</result>
+		</global-results>
+
+		<!-- <action name="helloworld" class="com.haochen.action.HelloWorldAction"> 
+			<result>/pages/result.jsp</result> </action> <action name="userJson" class="com.haochen.action.UserJsonAction"> 
+			<result type="json"> </result> </action> -->
+	</package>
+</struts>
